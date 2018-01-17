@@ -1,7 +1,6 @@
 <p align="center">
- <img width="467px" height="115" alt="js-excel-generator" src="/images/logo.png"/> 
+ <img width="467px" height="115" alt="js-excel-generator" src="https://i.imgur.com/Xw7Xfnv.png"/> 
 </p>
- 
 ##### A JavaScript Library for creating Excel Spreadsheets from HTML Tables
 
 Small HTML JavaScript Library which can be used to create Excel Spreadsheets 
@@ -13,5 +12,5 @@ figure out how it works.  Thanks!
 [Live Demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm)
 
 <p align="center">
- <img width="401px" height="106" alt="ecsc" src="/images/ecsc_open_source.png"/> 
+ <img width="401px" height="106" alt="ecsc" src="https://i.imgur.com/SzVdycv.png"/> 
 </p>
