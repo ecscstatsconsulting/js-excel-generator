@@ -1,5 +1,5 @@
 <p align="center">
- <img width="467px" height="115" alt="js-excel-generator" src="https://raw.githubusercontent.com/ecscstatsconsulting/js-excel-generator/blob/master/images/logo.png"/> 
+ <img width="467px" height="115" alt="js-excel-generator" src="/images/logo.png"/> 
 </p>
  
 ##### A JavaScript Library for creating Excel Spreadsheets from HTML Tables
