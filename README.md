@@ -1,10 +1,11 @@
 <p align="center">
  <img width="467px" height="115" alt="js-excel-generator" src="https://i.imgur.com/Xw7Xfnv.png"/> 
 </p>
-##### A JavaScript Library for creating Excel Spreadsheets from HTML Tables
-
+<p align="center">
+<b>A JavaScript Library for creating Excel Spreadsheets from HTML Tables</b>
+</p>
 Small HTML JavaScript Library which can be used to create Excel Spreadsheets 
-from HTML Tables.  This project is in it's very early stages, documentation, 
+from HTML Tables.  This project is in its very early stages, documentation, 
 additions and refinements to the library will be made very soon.  If you would 
 like to try it out before then, please feel free to check out this demo and 
 figure out how it works.  Thanks!
