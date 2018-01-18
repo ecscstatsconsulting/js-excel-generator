@@ -29,10 +29,6 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Author Paul Warren */
 
-String.prototype.format = function () {
-    return (function (a, t) { return t.replace(/\{(\d+)\}/g, function (_, i) { return a[~ ~i] }) })(arguments, this);
-};
-
 //Initial XLSX Generation assumes default Workbook with sheet1, sheet2 and sheet3 inside.  Will upgrade to be more flexible in future releases.
 
 /**
@@ -231,7 +227,7 @@ function ExcelGen(options) {
                     } else {
                         data.push(cell.format((me.__column_number__(j + 1) + "" + (i + 1)), c.value));
                     }
-                    colWidths[j] = (!colWidths[j] || (c.value.length + 5) > colWidths[j]) ? c.text.length + 5 : colWidths[j];
+                    colWidths[j] = (!colWidths[j] || (c.text.length + 5) > colWidths[j]) ? c.text.length + 5 : colWidths[j];
                 });
                 data.push(ot.xml.close_row);
             });
@@ -266,6 +262,23 @@ function ExcelGen(options) {
         }
         return out;
     };
+
+	String.prototype.format = function () {
+		return (function (a, t) { return t.replace(/\{(\d+)\}/g, function (_, i) { return a[~ ~i] }) })(arguments, this);
+	};
+
+	/**
+	 *    Extension of JQuery Library for getting either the text or the value out of child elements.
+	 *
+	 *    Looks at the children elements, if it finds select or input tag, 
+	 *    it returns the value, otherwise it returns the text of the element.
+	 */
+	jQuery.fn.extend({
+	  "textOrValue": function () {
+		var t = this.find("select, input");
+		return (t.length) ? t.val():this.text();
+	  }
+	});
 
     /**
      * Basic internal initialization.
@@ -306,7 +319,7 @@ function ExcelGen(options) {
             var outerThis = this;
             this.options.header_row.children("th,td").each(function () {
                 //header text gets stored for table
-                var txt = $(this).text().trim().replace(/ +(?= )/g, '');
+                var txt = $(this).textOrValue().trim().replace(/ +(?= )/g, '');
                 outerThis.headers.push(txt);
                 row.push(outerThis.sharedStrings.add(txt));
             });
@@ -317,7 +330,7 @@ function ExcelGen(options) {
             this.options.body_rows.each(function () {
                 var row = [];
                 $(this).children("td").each(function () {
-                    row.push(outerThis.sharedStrings.add($(this).text().trim().replace(/ +(?= )/g, '')));
+                    row.push(outerThis.sharedStrings.add($(this).textOrValue().trim().replace(/ +(?= )/g, '')));
                 });
                 outerThis.sheet.rows.push(row);
             });
