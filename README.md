@@ -11,7 +11,7 @@ from HTML Tables.
 
 [Live Demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm)
 
-The project is still very early in development, more updates will follow shortly
+The project is still very early in development, more updates will follow shortly.
 
 ## Getting Started - How to use
 
