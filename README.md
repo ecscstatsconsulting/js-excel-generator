@@ -11,6 +11,8 @@ from HTML Tables.
 
 [Live Demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm)
 
+The project is still very early in development, more updates will follow shortly
+
 ## Getting Started - How to use
 
  - Include and reference the excel-gen.js library and the jquery, jszip and FileSaver dependencies
