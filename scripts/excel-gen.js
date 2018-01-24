@@ -39,14 +39,18 @@ Author Paul Warren */
 */
 function ExcelGen(options) {
     //internal access to this
-    me = this;
+    var me = this;
 
     this.defaultOptions = {
         "src_id": "",
         "type": "table",
         "show_header": false,
+        "auto_format": false,
         "header_row": null,
-        "body_rows": null
+        "body_rows": null,
+        "author": "JavaScript Excel Generator",
+        "file_name": "output.xlsx",
+        "column_formats": []
     }
 
     this.options = {};
@@ -63,7 +67,7 @@ function ExcelGen(options) {
         },
         "docProps": {
             "app.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPFByb3BlcnRpZXMgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9vZmZpY2VEb2N1bWVudC8yMDA2L2V4dGVuZGVkLXByb3BlcnRpZXMiIHhtbG5zOnZ0PSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9kb2NQcm9wc1ZUeXBlcyI+PEFwcGxpY2F0aW9uPk1pY3Jvc29mdCBFeGNlbDwvQXBwbGljYXRpb24+PERvY1NlY3VyaXR5PjA8L0RvY1NlY3VyaXR5PjxTY2FsZUNyb3A+ZmFsc2U8L1NjYWxlQ3JvcD48SGVhZGluZ1BhaXJzPjx2dDp2ZWN0b3Igc2l6ZT0iMiIgYmFzZVR5cGU9InZhcmlhbnQiPjx2dDp2YXJpYW50Pjx2dDpscHN0cj5Xb3Jrc2hlZXRzPC92dDpscHN0cj48L3Z0OnZhcmlhbnQ+PHZ0OnZhcmlhbnQ+PHZ0Omk0PjM8L3Z0Omk0PjwvdnQ6dmFyaWFudD48L3Z0OnZlY3Rvcj48L0hlYWRpbmdQYWlycz48VGl0bGVzT2ZQYXJ0cz48dnQ6dmVjdG9yIHNpemU9IjMiIGJhc2VUeXBlPSJscHN0ciI+PHZ0Omxwc3RyPlNoZWV0MTwvdnQ6bHBzdHI+PHZ0Omxwc3RyPlNoZWV0MjwvdnQ6bHBzdHI+PHZ0Omxwc3RyPlNoZWV0MzwvdnQ6bHBzdHI+PC92dDp2ZWN0b3I+PC9UaXRsZXNPZlBhcnRzPjxDb21wYW55PjwvQ29tcGFueT48TGlua3NVcFRvRGF0ZT5mYWxzZTwvTGlua3NVcFRvRGF0ZT48U2hhcmVkRG9jPmZhbHNlPC9TaGFyZWREb2M+PEh5cGVybGlua3NDaGFuZ2VkPmZhbHNlPC9IeXBlcmxpbmtzQ2hhbmdlZD48QXBwVmVyc2lvbj4xNC4wMzAwPC9BcHBWZXJzaW9uPjwvUHJvcGVydGllcz4=",
-            "core.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPGNwOmNvcmVQcm9wZXJ0aWVzIHhtbG5zOmNwPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvcGFja2FnZS8yMDA2L21ldGFkYXRhL2NvcmUtcHJvcGVydGllcyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpkY3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+PGRjOmNyZWF0b3I+SmF2YVNjcmlwdCBFeGNlbCBHZW5lcmF0b3I8L2RjOmNyZWF0b3I+PGNwOmxhc3RNb2RpZmllZEJ5PkphdmFTY3JpcHQgRXhjZWwgR2VuZXJhdG9yPC9jcDpsYXN0TW9kaWZpZWRCeT48ZGN0ZXJtczpjcmVhdGVkIHhzaTp0eXBlPSJkY3Rlcm1zOlczQ0RURiI+MjAxOC0wMS0xNVQxNzo0NjowNVo8L2RjdGVybXM6Y3JlYXRlZD48ZGN0ZXJtczptb2RpZmllZCB4c2k6dHlwZT0iZGN0ZXJtczpXM0NEVEYiPjIwMTgtMDEtMTVUMTc6NDg6MTZaPC9kY3Rlcm1zOm1vZGlmaWVkPjwvY3A6Y29yZVByb3BlcnRpZXM+"
+            "core.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPGNwOmNvcmVQcm9wZXJ0aWVzIHhtbG5zOmNwPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvcGFja2FnZS8yMDA2L21ldGFkYXRhL2NvcmUtcHJvcGVydGllcyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpkY3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+PGRjOmNyZWF0b3I+ezB9PC9kYzpjcmVhdG9yPjxjcDpsYXN0TW9kaWZpZWRCeT57MX08L2NwOmxhc3RNb2RpZmllZEJ5PjxkY3Rlcm1zOmNyZWF0ZWQgeHNpOnR5cGU9ImRjdGVybXM6VzNDRFRGIj4yMDE4LTAxLTE1VDE3OjQ2OjA1WjwvZGN0ZXJtczpjcmVhdGVkPjxkY3Rlcm1zOm1vZGlmaWVkIHhzaTp0eXBlPSJkY3Rlcm1zOlczQ0RURiI+MjAxOC0wMS0xNVQxNzo0ODoxNlo8L2RjdGVybXM6bW9kaWZpZWQ+PC9jcDpjb3JlUHJvcGVydGllcz4="
         },
         "xl": {
             "_rels": {
@@ -76,7 +80,8 @@ function ExcelGen(options) {
                 "_rels": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPFJlbGF0aW9uc2hpcHMgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9wYWNrYWdlLzIwMDYvcmVsYXRpb25zaGlwcyI+PFJlbGF0aW9uc2hpcCBJZD0icklkMSIgVHlwZT0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL29mZmljZURvY3VtZW50LzIwMDYvcmVsYXRpb25zaGlwcy90YWJsZSIgVGFyZ2V0PSIuLi90YWJsZXMvdGFibGUxLnhtbCIvPjwvUmVsYXRpb25zaGlwcz4=",
                 "blank_sheet": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPHdvcmtzaGVldCB4bWxucz0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL3NwcmVhZHNoZWV0bWwvMjAwNi9tYWluIiB4bWxuczpyPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvb2ZmaWNlRG9jdW1lbnQvMjAwNi9yZWxhdGlvbnNoaXBzIiB4bWxuczptYz0iaHR0cDovL3NjaGVtYXMub3BlbnhtbGZvcm1hdHMub3JnL21hcmt1cC1jb21wYXRpYmlsaXR5LzIwMDYiIG1jOklnbm9yYWJsZT0ieDE0YWMiIHhtbG5zOngxNGFjPSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL29mZmljZS9zcHJlYWRzaGVldG1sLzIwMDkvOS9hYyI+PGRpbWVuc2lvbiByZWY9IkExIi8+PHNoZWV0Vmlld3M+PHNoZWV0VmlldyB3b3JrYm9va1ZpZXdJZD0iMCIvPjwvc2hlZXRWaWV3cz48c2hlZXRGb3JtYXRQciBkZWZhdWx0Um93SGVpZ2h0PSIxNSIgeDE0YWM6ZHlEZXNjZW50PSIwLjI1Ii8+PHNoZWV0RGF0YS8+PHBhZ2VNYXJnaW5zIGxlZnQ9IjAuNyIgcmlnaHQ9IjAuNyIgdG9wPSIwLjc1IiBib3R0b209IjAuNzUiIGhlYWRlcj0iMC4zIiBmb290ZXI9IjAuMyIvPjwvd29ya3NoZWV0Pg=="
             },
-            "styles.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPHN0eWxlU2hlZXQgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9zcHJlYWRzaGVldG1sLzIwMDYvbWFpbiIgeG1sbnM6bWM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9tYXJrdXAtY29tcGF0aWJpbGl0eS8yMDA2IiBtYzpJZ25vcmFibGU9IngxNGFjIiB4bWxuczp4MTRhYz0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9vZmZpY2Uvc3ByZWFkc2hlZXRtbC8yMDA5LzkvYWMiPjxmb250cyBjb3VudD0iMSIgeDE0YWM6a25vd25Gb250cz0iMSI+PGZvbnQ+PHN6IHZhbD0iMTEiLz48Y29sb3IgdGhlbWU9IjEiLz48bmFtZSB2YWw9IkNhbGlicmkiLz48ZmFtaWx5IHZhbD0iMiIvPjxzY2hlbWUgdmFsPSJtaW5vciIvPjwvZm9udD48L2ZvbnRzPjxmaWxscyBjb3VudD0iMiI+PGZpbGw+PHBhdHRlcm5GaWxsIHBhdHRlcm5UeXBlPSJub25lIi8+PC9maWxsPjxmaWxsPjxwYXR0ZXJuRmlsbCBwYXR0ZXJuVHlwZT0iZ3JheTEyNSIvPjwvZmlsbD48L2ZpbGxzPjxib3JkZXJzIGNvdW50PSIxIj48Ym9yZGVyPjxsZWZ0Lz48cmlnaHQvPjx0b3AvPjxib3R0b20vPjxkaWFnb25hbC8+PC9ib3JkZXI+PC9ib3JkZXJzPjxjZWxsU3R5bGVYZnMgY291bnQ9IjEiPjx4ZiBudW1GbXRJZD0iMCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIi8+PC9jZWxsU3R5bGVYZnM+PGNlbGxYZnMgY291bnQ9IjIiPjx4ZiBudW1GbXRJZD0iMCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIi8+PHhmIG51bUZtdElkPSIwIiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5QWxpZ25tZW50PSIxIj48YWxpZ25tZW50IGhvcml6b250YWw9ImxlZnQiLz48L3hmPjwvY2VsbFhmcz48Y2VsbFN0eWxlcyBjb3VudD0iMSI+PGNlbGxTdHlsZSBuYW1lPSJOb3JtYWwiIHhmSWQ9IjAiIGJ1aWx0aW5JZD0iMCIvPjwvY2VsbFN0eWxlcz48ZHhmcyBjb3VudD0iMSI+PGR4Zj48YWxpZ25tZW50IGhvcml6b250YWw9ImxlZnQiIHZlcnRpY2FsPSJib3R0b20iIHRleHRSb3RhdGlvbj0iMCIgd3JhcFRleHQ9IjAiIGluZGVudD0iMCIganVzdGlmeUxhc3RMaW5lPSIwIiBzaHJpbmtUb0ZpdD0iMCIgcmVhZGluZ09yZGVyPSIwIi8+PC9keGY+PC9keGZzPjx0YWJsZVN0eWxlcyBjb3VudD0iMCIgZGVmYXVsdFRhYmxlU3R5bGU9IlRhYmxlU3R5bGVNZWRpdW0yIiBkZWZhdWx0UGl2b3RTdHlsZT0iUGl2b3RTdHlsZUxpZ2h0MTYiLz48ZXh0THN0PjxleHQgdXJpPSJ7RUI3OURFRjItODBCOC00M2U1LTk1QkQtNTRDQkRERjkwMjBDfSIgeG1sbnM6eDE0PSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL29mZmljZS9zcHJlYWRzaGVldG1sLzIwMDkvOS9tYWluIj48eDE0OnNsaWNlclN0eWxlcyBkZWZhdWx0U2xpY2VyU3R5bGU9IlNsaWNlclN0eWxlTGlnaHQxIi8+PC9leHQ+PC9leHRMc3Q+PC9zdHlsZVNoZWV0Pg==",
+            "styles.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdHlsZVNoZWV0IHhtbG5zPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvc3ByZWFkc2hlZXRtbC8yMDA2L21haW4iIHhtbG5zOm1jPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvbWFya3VwLWNvbXBhdGliaWxpdHkvMjAwNiIgeG1sbnM6eDE0YWM9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vb2ZmaWNlL3NwcmVhZHNoZWV0bWwvMjAwOS85L2FjIiBtYzpJZ25vcmFibGU9IngxNGFjIj4NCiAgIDxmb250cyBjb3VudD0iMSIgeDE0YWM6a25vd25Gb250cz0iMSI+DQogICAgICA8Zm9udD4NCiAgICAgICAgIDxzeiB2YWw9IjExIiAvPg0KICAgICAgICAgPGNvbG9yIHRoZW1lPSIxIiAvPg0KICAgICAgICAgPG5hbWUgdmFsPSJDYWxpYnJpIiAvPg0KICAgICAgICAgPGZhbWlseSB2YWw9IjIiIC8+DQogICAgICAgICA8c2NoZW1lIHZhbD0ibWlub3IiIC8+DQogICAgICA8L2ZvbnQ+DQogICA8L2ZvbnRzPg0KICAgPGZpbGxzIGNvdW50PSIyIj4NCiAgICAgIDxmaWxsPg0KICAgICAgICAgPHBhdHRlcm5GaWxsIHBhdHRlcm5UeXBlPSJub25lIiAvPg0KICAgICAgPC9maWxsPg0KICAgICAgPGZpbGw+DQogICAgICAgICA8cGF0dGVybkZpbGwgcGF0dGVyblR5cGU9ImdyYXkxMjUiIC8+DQogICAgICA8L2ZpbGw+DQogICA8L2ZpbGxzPg0KICAgPGJvcmRlcnMgY291bnQ9IjEiPg0KICAgICAgPGJvcmRlcj4NCiAgICAgICAgIDxsZWZ0IC8+DQogICAgICAgICA8cmlnaHQgLz4NCiAgICAgICAgIDx0b3AgLz4NCiAgICAgICAgIDxib3R0b20gLz4NCiAgICAgICAgIDxkaWFnb25hbCAvPg0KICAgICAgPC9ib3JkZXI+DQogICA8L2JvcmRlcnM+DQogICA8Y2VsbFN0eWxlWGZzIGNvdW50PSIxIj4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiAvPg0KICAgPC9jZWxsU3R5bGVYZnM+DQogICA8Y2VsbFhmcyBjb3VudD0iMjkiPg0KICAgICAgPHhmIG51bUZtdElkPSIwIiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjAiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlBbGlnbm1lbnQ9IjEiPg0KICAgICAgICAgPGFsaWdubWVudCBob3Jpem9udGFsPSJsZWZ0IiAvPg0KICAgICAgPC94Zj4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMiIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMyIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNiIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNyIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iOCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMzciIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjM4IiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSIzOSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNDAiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjkiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjEwIiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSIxMSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNDgiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjE0IiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSIxNSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMTYiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjE3IiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSIxOCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMTkiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjIwIiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSIyMSIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iMjIiIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICAgICA8eGYgbnVtRm10SWQ9IjQ1IiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5TnVtYmVyRm9ybWF0PSIxIiAvPg0KICAgICAgPHhmIG51bUZtdElkPSI0NiIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIiBhcHBseU51bWJlckZvcm1hdD0iMSIgLz4NCiAgICAgIDx4ZiBudW1GbXRJZD0iNDciIGZvbnRJZD0iMCIgZmlsbElkPSIwIiBib3JkZXJJZD0iMCIgeGZJZD0iMCIgYXBwbHlOdW1iZXJGb3JtYXQ9IjEiIC8+DQogICA8L2NlbGxYZnM+DQogICA8Y2VsbFN0eWxlcyBjb3VudD0iMSI+DQogICAgICA8Y2VsbFN0eWxlIG5hbWU9Ik5vcm1hbCIgeGZJZD0iMCIgYnVpbHRpbklkPSIwIiAvPg0KICAgPC9jZWxsU3R5bGVzPg0KICAgPGR4ZnMgY291bnQ9IjMiPg0KICAgICAgPGR4Zj4NCiAgICAgICAgIDxudW1GbXQgbnVtRm10SWQ9IjIiIGZvcm1hdENvZGU9IjAuMDAiIC8+DQogICAgICA8L2R4Zj4NCiAgICAgIDxkeGY+DQogICAgICAgICA8bnVtRm10IG51bUZtdElkPSIxOSIgZm9ybWF0Q29kZT0ibS9kL3l5eXkiIC8+DQogICAgICA8L2R4Zj4NCiAgICAgIDxkeGY+DQogICAgICAgICA8bnVtRm10IG51bUZtdElkPSIzIiBmb3JtYXRDb2RlPSIjLCMjMCIgLz4NCiAgICAgIDwvZHhmPg0KICAgPC9keGZzPg0KICAgPHRhYmxlU3R5bGVzIGNvdW50PSIwIiBkZWZhdWx0VGFibGVTdHlsZT0iVGFibGVTdHlsZU1lZGl1bTIiIGRlZmF1bHRQaXZvdFN0eWxlPSJQaXZvdFN0eWxlTGlnaHQxNiIgLz4NCiAgIDxleHRMc3Q+DQogICAgICA8ZXh0IHhtbG5zOngxND0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9vZmZpY2Uvc3ByZWFkc2hlZXRtbC8yMDA5LzkvbWFpbiIgdXJpPSJ7RUI3OURFRjItODBCOC00M2U1LTk1QkQtNTRDQkRERjkwMjBDfSI+DQogICAgICAgICA8eDE0OnNsaWNlclN0eWxlcyBkZWZhdWx0U2xpY2VyU3R5bGU9IlNsaWNlclN0eWxlTGlnaHQxIiAvPg0KICAgICAgPC9leHQ+DQogICA8L2V4dExzdD4NCjwvc3R5bGVTaGVldD4=",
+            //"styles.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPHN0eWxlU2hlZXQgeG1sbnM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9zcHJlYWRzaGVldG1sLzIwMDYvbWFpbiIgeG1sbnM6bWM9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9tYXJrdXAtY29tcGF0aWJpbGl0eS8yMDA2IiBtYzpJZ25vcmFibGU9IngxNGFjIiB4bWxuczp4MTRhYz0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9vZmZpY2Uvc3ByZWFkc2hlZXRtbC8yMDA5LzkvYWMiPjxmb250cyBjb3VudD0iMSIgeDE0YWM6a25vd25Gb250cz0iMSI+PGZvbnQ+PHN6IHZhbD0iMTEiLz48Y29sb3IgdGhlbWU9IjEiLz48bmFtZSB2YWw9IkNhbGlicmkiLz48ZmFtaWx5IHZhbD0iMiIvPjxzY2hlbWUgdmFsPSJtaW5vciIvPjwvZm9udD48L2ZvbnRzPjxmaWxscyBjb3VudD0iMiI+PGZpbGw+PHBhdHRlcm5GaWxsIHBhdHRlcm5UeXBlPSJub25lIi8+PC9maWxsPjxmaWxsPjxwYXR0ZXJuRmlsbCBwYXR0ZXJuVHlwZT0iZ3JheTEyNSIvPjwvZmlsbD48L2ZpbGxzPjxib3JkZXJzIGNvdW50PSIxIj48Ym9yZGVyPjxsZWZ0Lz48cmlnaHQvPjx0b3AvPjxib3R0b20vPjxkaWFnb25hbC8+PC9ib3JkZXI+PC9ib3JkZXJzPjxjZWxsU3R5bGVYZnMgY291bnQ9IjEiPjx4ZiBudW1GbXRJZD0iMCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIi8+PC9jZWxsU3R5bGVYZnM+PGNlbGxYZnMgY291bnQ9IjIiPjx4ZiBudW1GbXRJZD0iMCIgZm9udElkPSIwIiBmaWxsSWQ9IjAiIGJvcmRlcklkPSIwIiB4ZklkPSIwIi8+PHhmIG51bUZtdElkPSIwIiBmb250SWQ9IjAiIGZpbGxJZD0iMCIgYm9yZGVySWQ9IjAiIHhmSWQ9IjAiIGFwcGx5QWxpZ25tZW50PSIxIj48YWxpZ25tZW50IGhvcml6b250YWw9ImxlZnQiLz48L3hmPjwvY2VsbFhmcz48Y2VsbFN0eWxlcyBjb3VudD0iMSI+PGNlbGxTdHlsZSBuYW1lPSJOb3JtYWwiIHhmSWQ9IjAiIGJ1aWx0aW5JZD0iMCIvPjwvY2VsbFN0eWxlcz48ZHhmcyBjb3VudD0iMSI+PGR4Zj48YWxpZ25tZW50IGhvcml6b250YWw9ImxlZnQiIHZlcnRpY2FsPSJib3R0b20iIHRleHRSb3RhdGlvbj0iMCIgd3JhcFRleHQ9IjAiIGluZGVudD0iMCIganVzdGlmeUxhc3RMaW5lPSIwIiBzaHJpbmtUb0ZpdD0iMCIgcmVhZGluZ09yZGVyPSIwIi8+PC9keGY+PC9keGZzPjx0YWJsZVN0eWxlcyBjb3VudD0iMCIgZGVmYXVsdFRhYmxlU3R5bGU9IlRhYmxlU3R5bGVNZWRpdW0yIiBkZWZhdWx0UGl2b3RTdHlsZT0iUGl2b3RTdHlsZUxpZ2h0MTYiLz48ZXh0THN0PjxleHQgdXJpPSJ7RUI3OURFRjItODBCOC00M2U1LTk1QkQtNTRDQkRERjkwMjBDfSIgeG1sbnM6eDE0PSJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL29mZmljZS9zcHJlYWRzaGVldG1sLzIwMDkvOS9tYWluIj48eDE0OnNsaWNlclN0eWxlcyBkZWZhdWx0U2xpY2VyU3R5bGU9IlNsaWNlclN0eWxlTGlnaHQxIi8+PC9leHQ+PC9leHRMc3Q+PC9zdHlsZVNoZWV0Pg==",
             "workbook.xml": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPHdvcmtib29rIHhtbG5zPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvc3ByZWFkc2hlZXRtbC8yMDA2L21haW4iIHhtbG5zOnI9Imh0dHA6Ly9zY2hlbWFzLm9wZW54bWxmb3JtYXRzLm9yZy9vZmZpY2VEb2N1bWVudC8yMDA2L3JlbGF0aW9uc2hpcHMiPjxmaWxlVmVyc2lvbiBhcHBOYW1lPSJ4bCIgbGFzdEVkaXRlZD0iNSIgbG93ZXN0RWRpdGVkPSI1IiBydXBCdWlsZD0iOTMwMyIvPjx3b3JrYm9va1ByIGRlZmF1bHRUaGVtZVZlcnNpb249IjEyNDIyNiIvPjxib29rVmlld3M+PHdvcmtib29rVmlldyB4V2luZG93PSIxMjAiIHlXaW5kb3c9IjEwNSIgd2luZG93V2lkdGg9IjEyNDM1IiB3aW5kb3dIZWlnaHQ9IjY5OTAiLz48L2Jvb2tWaWV3cz48c2hlZXRzPjxzaGVldCBuYW1lPSJTaGVldDEiIHNoZWV0SWQ9IjEiIHI6aWQ9InJJZDEiLz48c2hlZXQgbmFtZT0iU2hlZXQyIiBzaGVldElkPSIyIiByOmlkPSJySWQyIi8+PHNoZWV0IG5hbWU9IlNoZWV0MyIgc2hlZXRJZD0iMyIgcjppZD0icklkMyIvPjwvc2hlZXRzPjxjYWxjUHIgY2FsY0lkPSIxNDU2MjEiLz48L3dvcmtib29rPg=="
         },
         "ContentTypes": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pg0KPFR5cGVzIHhtbG5zPSJodHRwOi8vc2NoZW1hcy5vcGVueG1sZm9ybWF0cy5vcmcvcGFja2FnZS8yMDA2L2NvbnRlbnQtdHlwZXMiPjxEZWZhdWx0IEV4dGVuc2lvbj0icmVscyIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1wYWNrYWdlLnJlbGF0aW9uc2hpcHMreG1sIi8+PERlZmF1bHQgRXh0ZW5zaW9uPSJ4bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi94bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii94bC93b3JrYm9vay54bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtb2ZmaWNlZG9jdW1lbnQuc3ByZWFkc2hlZXRtbC5zaGVldC5tYWluK3htbCIvPjxPdmVycmlkZSBQYXJ0TmFtZT0iL3hsL3dvcmtzaGVldHMvc2hlZXQxLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLndvcmtzaGVldCt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii94bC93b3Jrc2hlZXRzL3NoZWV0Mi54bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtb2ZmaWNlZG9jdW1lbnQuc3ByZWFkc2hlZXRtbC53b3Jrc2hlZXQreG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvd29ya3NoZWV0cy9zaGVldDMueG1sIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LnNwcmVhZHNoZWV0bWwud29ya3NoZWV0K3htbCIvPjxPdmVycmlkZSBQYXJ0TmFtZT0iL3hsL3RoZW1lL3RoZW1lMS54bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtb2ZmaWNlZG9jdW1lbnQudGhlbWUreG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvc3R5bGVzLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLnN0eWxlcyt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii94bC9zaGFyZWRTdHJpbmdzLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLnNoYXJlZFN0cmluZ3MreG1sIi8+PE92ZXJyaWRlIFBhcnROYW1lPSIveGwvdGFibGVzL3RhYmxlMS54bWwiIENvbnRlbnRUeXBlPSJhcHBsaWNhdGlvbi92bmQub3BlbnhtbGZvcm1hdHMtb2ZmaWNlZG9jdW1lbnQuc3ByZWFkc2hlZXRtbC50YWJsZSt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii9kb2NQcm9wcy9jb3JlLnhtbCIgQ29udGVudFR5cGU9ImFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1wYWNrYWdlLmNvcmUtcHJvcGVydGllcyt4bWwiLz48T3ZlcnJpZGUgUGFydE5hbWU9Ii9kb2NQcm9wcy9hcHAueG1sIiBDb250ZW50VHlwZT0iYXBwbGljYXRpb24vdm5kLm9wZW54bWxmb3JtYXRzLW9mZmljZWRvY3VtZW50LmV4dGVuZGVkLXByb3BlcnRpZXMreG1sIi8+PC9UeXBlcz4="
@@ -91,11 +96,11 @@ function ExcelGen(options) {
     /**** XML GENERATORS ****/
 
     /**
-     * Creates sharedStrings.xml file.
-     * 
-     * Excel files have a sharedStrings.xml, this file holds all of the strings
-     * used in the Excel spreadsheet to reduce repeating data.
-     */
+    * Creates sharedStrings.xml file.
+    * 
+    * Excel files have a sharedStrings.xml, this file holds all of the strings
+    * used in the Excel spreadsheet to reduce repeating data.
+    */
     this.sharedStrings = {
         "xml": {
             //sst: {0} = count
@@ -108,24 +113,31 @@ function ExcelGen(options) {
         "count": 0,
         "vals": [],
         /**
-         * Adds value to Cache if it is a string and isn't already included.
-         *
-         * @returns {sharedString Value Object}
-         */
+        * Adds value to Cache if it is a string and isn't already included.
+        *
+        * @returns {sharedString Value Object}
+        */
         "add": function (value) {
-            if (isNaN(value)) {
+            //update to specify format for input by column, or have autoformat.
+            //based upon default excel format numbering system
+            if (value.match(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:(\.|,)\d+)?$/)) {
+                console.log("literal: " + value);
+                return { "type": "literal", "value": value.replace(/,/g,""), "text": value };
+            } else if (me.__isDate__(value)) {
+                var tmp = new Date(Date.parse(value));
+                var ser = 25569.0 + ((tmp.getTime() - (tmp.getTimezoneOffset() * 60 * 1000)) / (1000 * 60 * 60 * 24))
+                return { "type": "literal", "value": ser, "text": value };
+            } else {
                 this.count++;
                 if (this.vals.indexOf(value) === -1) {
                     this.vals.push(value);
                 }
                 return { "type": "shared", "value": this.vals.indexOf(value), "text": value };
-            } else {
-                return { "type": "literal", "value": value, "text": value };
             }
         },
         /**
-         * Creates sharedString.xml.
-         */
+        * Creates sharedString.xml.
+        */
         "to_xml": function () {
             out = [];
             out.push(atob(me.static_pieces.xml_header));
@@ -186,7 +198,7 @@ function ExcelGen(options) {
             "close_row": "</row>",
             //cell: {0} = r
             //cell: {1} = cell value
-            "cell": "PGMgcj0iezB9IiBzPSIxIj48dj57MX08L3Y+PC9jPg==",
+            "cell": "PGMgcj0iezB9IiBzPSJ7MX0iPjx2PnsyfTwvdj48L2M+",
             "shared_cell": "PGMgcj0iezB9IiBzPSIxIiB0PSJzIj48dj57MX08L3Y+PC9jPg==",
             "table": "PHRhYmxlUGFydHMgY291bnQ9IjEiPjx0YWJsZVBhcnQgcjppZD0icklkMSIvPjwvdGFibGVQYXJ0cz4=",
             //col: {0} = min
@@ -203,13 +215,13 @@ function ExcelGen(options) {
         "is_table": true,
         "to_xml": function () {
             //generate the beginning xml of the sheet
-            front = [];
+            var front = [];
             front.push(atob(me.static_pieces.xml_header));
             front.push("\n");
             me.range = me.__column_number__(1) + "1:" + me.__column_number__(this.rows[0].length) + this.rows.length;
             front.push(atob(this.xml.start).format(me.range, me.range));
 
-            data = [];
+            var data = [];
 
             data.push(this.xml.open_sd);
             var spans = "1:" + this.rows[0].length;
@@ -218,14 +230,18 @@ function ExcelGen(options) {
             var cell = atob(this.xml.cell);
             var shared_cell = atob(this.xml.shared_cell);
 
-            ot = this;
+            var ot = this;
             this.rows.forEach(function (v, i) {
                 data.push(row.format((i + 1), spans));
                 v.forEach(function (c, j) {
                     if (c.type === "shared") {
                         data.push(shared_cell.format((me.__column_number__(j + 1) + "" + (i + 1)), c.value));
                     } else {
-                        data.push(cell.format((me.__column_number__(j + 1) + "" + (i + 1)), c.value));
+                        var xf = "0"
+                        if ((me.options.column_formats) && (j < me.options.column_formats.length)) {
+                            xf = me.options.column_formats[j];
+                        }
+                        data.push(cell.format((me.__column_number__(j + 1) + "" + (i + 1)), xf, c.value));
                     }
                     colWidths[j] = (!colWidths[j] || (c.text.length + 5) > colWidths[j]) ? c.text.length + 5 : colWidths[j];
                 });
@@ -239,7 +255,7 @@ function ExcelGen(options) {
             }
             data.push(this.xml.end);
 
-            cols = [];
+            var cols = [];
             col = atob(this.xml.col);
             cols.push(this.xml.open_cols);
             for (var key in colWidths) {
@@ -263,26 +279,47 @@ function ExcelGen(options) {
         return out;
     };
 
-	String.prototype.format = function () {
-		return (function (a, t) { return t.replace(/\{(\d+)\}/g, function (_, i) { return a[~ ~i] }) })(arguments, this);
-	};
+    String.prototype.format = function () {
+        return (function (a, t) { return t.replace(/\{(\d+)\}/g, function (_, i) { return a[~ ~i] }) })(arguments, this);
+    };
 
-	/**
-	 *    Extension of JQuery Library for getting either the text or the value out of child elements.
-	 *
-	 *    Looks at the children elements, if it finds select or input tag, 
-	 *    it returns the value, otherwise it returns the text of the element.
-	 */
-	jQuery.fn.extend({
-	  "textOrValue": function () {
-		var t = this.find("select, input");
-		return (t.length) ? t.val():this.text();
-	  }
-	});
+    this.__isDate__ = function (s) {
+        // make sure it is in the expected format
+        if (s.search(/^\d{1,2}[\/|\-|\.|_]\d{1,2}[\/|\-|\.|_]\d{4}/g) != 0)
+            return false;
+
+        // remove other separators that are not valid with the Date class    
+        s = s.replace(/[\-|\.|_]/g, "/");
+
+        // convert it into a date instance
+        var dt = new Date(Date.parse(s));
+
+        // check the components of the date
+        // since Date instance automatically rolls over each component
+        var arrDateParts = s.split("/");
+        return (
+             dt.getMonth() == arrDateParts[0] - 1 &&
+             dt.getDate() == arrDateParts[1] &&
+             dt.getFullYear() == arrDateParts[2]
+         );
+    }
 
     /**
-     * Basic internal initialization.
-     */
+    *    Extension of JQuery Library for getting either the text or the value out of child elements.
+    *
+    *    Looks at the children elements, if it finds select or input tag, 
+    *    it returns the value, otherwise it returns the text of the element.
+    */
+    jQuery.fn.extend({
+        "textOrValue": function () {
+            var t = this.find("select, input");
+            return (t.length) ? t.val() : this.text();
+        }
+    });
+
+    /**
+    * Basic internal initialization.
+    */
     this.__initialize__ = function (options) {
         this.options = $.extend(this.defaultOptions, options);
         this.__readHTMLTable__();
@@ -342,7 +379,7 @@ function ExcelGen(options) {
         var zip = new JSZip(), _rels = zip.folder("_rels"), doc = zip.folder("docProps"), xl = zip.folder("xl");
         _rels.file(".rels", atob(this.static_components._rels[".rels"]));
         doc.file("app.xml", atob(this.static_components.docProps["app.xml"]));
-        doc.file("core.xml", atob(this.static_components.docProps["core.xml"]));
+        doc.file("core.xml", atob(this.static_components.docProps["core.xml"]).format(this.options.author, this.options.author));
         zip.file("[Content_Types].xml", atob(this.static_components.ContentTypes));
         xl_rels = xl.folder("_rels");
         xl_theme = xl.folder("theme");
@@ -375,7 +412,7 @@ function ExcelGen(options) {
         workbook.tables.file("table1.xml", this.table.to_xml());
         workbook.base.generateAsync({ type: "blob" })
             .then(function (content) {
-                saveAs(content, "example.xlsx");
+                saveAs(content, me.options.file_name);
             });
     };
 
