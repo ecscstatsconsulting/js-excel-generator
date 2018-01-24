@@ -60,7 +60,7 @@ The following options are current available:
 
 **body_rows** - Jquery Elements of the body TR tags, if src_id is not specified this will be used.
 
-**__note: both header_row and body_rows properties must be set if not using src_id__**
+__note: both header_row and body_rows properties must be set if not using src_id__
 
 **type** - If set to 'table', the output will be generated inside of a Filterable Excel Table
 
