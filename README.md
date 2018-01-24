@@ -76,6 +76,8 @@ The following options are current available:
 The code uses jQuery, jszip.js and FileSaver.js.  For ease of use, these libraries 
 have been included in the 'external' folder of this project.
 
+##
+
 <p align="center">
  <img width="401px" height="106" alt="ecsc" src="https://i.imgur.com/SzVdycv.png"/> 
 </p>
