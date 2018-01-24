@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -14,6 +14,14 @@
             background-color: #cccccc;
             margin: 20px;
         }
+		ul li {
+			text-align: left;
+		}
+		code {
+			text-align: left;
+			background: white;
+			display: block;
+		}
         .table-container 
         {
             margin-left: 40px;
@@ -56,11 +64,18 @@
     </style>
 </head>
 <body>
+	<h1>Examples and code:</h1>
+
+	<ul>
+		<li><a href="#basic">Basic Table</a></li>
+		<li><a href="#formatted">Formatted Table</a></li>
+	</ul>
     <div class="table-container">
-        <button id="generate-excel">
+		<h2 id="basic">Basic Table</h2>
+        <button id="generate-excel-basic">
             Generate Excel</button>
         <br /><br />
-        <table id="test_table" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+        <table id="basic_table" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>
@@ -940,6 +955,77 @@
                 </tr>
             </tbody>
         </table>
+		<h3>Code:</h3>
+		<code>
+			$("#generate-excel-basic").click(function () {<br/>
+			&#160;&#160;excel = new ExcelGen({<br/>
+				&#160;&#160;&#160;&#160;"src_id": "basic_table",<br/>
+				&#160;&#160;&#160;&#160;"show_header": true,<br/>
+				&#160;&#160;&#160;&#160;"type": "table"<br/>
+				&#160;&#160;});<br/>
+				&#160;&#160;excel.generate();<br/>
+			});<br/>
+		</code>
+		<br/>
+		<hr/>
+		<br/>
+		<h2 id="formatted">Formatted Column Table</h2>
+        <button id="generate-excel-formatted">
+            Generate Excel</button>
+        <br /><br />
+        <table id="formatted_table" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+					<th>ID</th>
+					<th>Product</th>
+					<th>Quantity</th>
+					<th>Amount</th>
+					<th>Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr>
+					<td>1</td>
+					<td>Bottled Water</td>
+					<td>1000</td>
+					<td>3.49</td>
+					<td>06/26/2017</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Microsoft Surface Book</td>
+					<td>2</td>
+					<td>2341.44</td>
+					<td>07/04/2017</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>Microsoft Surface Arc Mouse</td>
+					<td>4</td>
+					<td>86.99</td>
+					<td>07/06/2017</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>Long-sleeve Shirt</td>
+					<td>7</td>
+					<td>20.23</td>
+					<td>01/02/2018</td>
+				</tr>
+            </tbody>
+        </table>
+		<h3>Code:</h3>
+		<code>
+			$("#generate-excel-basic").click(function () {<br/>
+			&#160;&#160;excel = new ExcelGen({<br/>
+				&#160;&#160;&#160;&#160;"src_id": "formatted_table",<br/>
+				&#160;&#160;&#160;&#160;"show_header": true,<br/>
+				&#160;&#160;&#160;&#160;"type": "table"<br/>
+				&#160;&#160;&#160;&#160;"column_formats": ["1", "1", "4", "6", "18"] <br/>
+				&#160;&#160;});<br/>
+				&#160;&#160;excel.generate();<br/>
+			});<br/>
+		</code>
     </div>
 </body>
 </html>
