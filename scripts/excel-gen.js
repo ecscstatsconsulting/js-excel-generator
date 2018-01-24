@@ -212,10 +212,10 @@ function ExcelGen(options) {
             "end": "</worksheet>"
         },
         "rows": [],
-        "is_table": true,
         "to_xml": function () {
             //generate the beginning xml of the sheet
             var front = [];
+			var is_table = (me.options.type === "table") ? true: false;
             front.push(atob(me.static_pieces.xml_header));
             front.push("\n");
             me.range = me.__column_number__(1) + "1:" + me.__column_number__(this.rows[0].length) + this.rows.length;
@@ -250,7 +250,7 @@ function ExcelGen(options) {
 
             data.push(this.xml.close_sd);
             data.push(atob(this.xml.margins));
-            if (this.is_table) {
+            if (is_table) {
                 data.push(atob(this.xml.table));
             }
             data.push(this.xml.end);
