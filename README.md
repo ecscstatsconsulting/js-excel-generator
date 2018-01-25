@@ -1,7 +1,7 @@
 <p align="center">
  <img width="467px" height="115" alt="js-excel-generator" src="https://i.imgur.com/Xw7Xfnv.png"/> 
 </p>
-<p align="center">
+<p align="center"> 
 <b>A JavaScript Library for creating Excel Spreadsheets from HTML Tables</b>
 </p>
 
