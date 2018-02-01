@@ -1,4 +1,4 @@
-﻿/*require jszip.js FileSaver.js jquery*/
+/*require jszip.js FileSaver.js jquery*/
 
 /* excel-gen.js
 
@@ -327,8 +327,8 @@ function ExcelGen(options) {
 
     this.__readHTMLTable__ = function () {
         //setup HTML input
-        if (this.options.src_id) {
-            var table = $("#" + this.options.src_id);
+        if ((this.options.src_id) || (this.options.src)) {
+            var table = (this.options.src_id) ? $("#" + this.options.src_id) : this.options.src;
             if ((table.length) && (table.prop("tagName") == "TABLE")) {
                 var skipFirst = false;
                 if ((!this.options.header_row) && (this.options.show_header)) {
