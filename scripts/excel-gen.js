@@ -371,14 +371,14 @@ function ExcelGen(options) {
         if (this.options.header_row) {
             var row = [];
             var outerThis = this;
-	    var colCount = 1;
+	        var colCount = 1;
             this.options.header_row.children("th,td").each(function () {
                 //header text gets stored for table
                 var txt = $(this).textOrValue().trim().replace(/ +(?= )/g, '');
-		if ((txt == "") && (outerThis.options.type == "table")) txt = "Column " + colCount;
-                outerThis.headers.push(txt);
+		        if ((txt == "") && (outerThis.options.type == "table")) txt = "Column " + colCount;
+                outerThis.headers.push(txt.replace(/[<]/g,""));
                 row.push(outerThis.sharedStrings.add(txt));
-		colCount++;
+		        colCount++;
             });
             this.sheet.rows.push(row);
         }
