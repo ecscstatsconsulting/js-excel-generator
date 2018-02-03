@@ -46,6 +46,7 @@ The following options are current available:
 ```
 {
     "src_id": "",
+    "src": null
     "header_row": null,
     "body_rows": null,
     "type": "table|normal",
@@ -56,11 +57,13 @@ The following options are current available:
 }
 ```
 
-**src_id** - ID of HTML Table to Export to Excel.  Can use header_row and body_rows instead.
+**src_id** - ID of HTML Table to Export to Excel.  Can use src or header_row and body_rows instead.
 
-**header_row** - JQuery Element of the header TR tag, if src_id is not specified this will be used.
+**src** - jQuery element of the HTML Table to Export to Excel
 
-**body_rows** - Jquery Elements of the body TR tags, if src_id is not specified this will be used.
+**header_row** - JQuery Element of the header TR tag, if src_id or src is not specified this will be used.
+
+**body_rows** - Jquery Elements of the body TR tags, if src_id or src is not specified this will be used.
 
 *note: both header_row and body_rows properties must be set if not using src_id*
 
