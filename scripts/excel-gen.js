@@ -387,7 +387,7 @@ function ExcelGen(options) {
         if (this.options.body_rows) {
             this.options.body_rows.each(function () {
                 var row = [];
-                $(this).children("td").each(function () {
+                $(this).children("th,td").each(function () {
                     row.push(outerThis.sharedStrings.add($(this).textOrValue().trim().replace(/ +(?= )/g, '')));
                 });
                 outerThis.sheet.rows.push(row);
