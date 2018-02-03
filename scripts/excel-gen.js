@@ -129,6 +129,7 @@ function ExcelGen(options) {
                 return { "type": "literal", "value": ser, "text": value };
             } else {
                 this.count++;
+                value = me.encode(value);
                 if (this.vals.indexOf(value) === -1) {
                     this.vals.push(value);
                 }
@@ -303,6 +304,23 @@ function ExcelGen(options) {
              dt.getFullYear() == arrDateParts[2]
          );
     }
+
+    this.encode = function(str) {
+        var hex = function (v) {
+          return '&#x' + v.toString(16).toUpperCase() + ';';
+        };
+        
+            var es = function(v) {
+                return hex(v.charCodeAt(0));
+            };
+    
+          str = str.replace(/["&'<>`]/g, es);
+    
+            return str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(v) {
+                    var upper = v.charCodeAt(0), lower = v.charCodeAt(1), o = (upper - 0xD800) * 0x400 + lower - 0xDC00 + 0x10000;
+                    return hex(o);
+            }).replace(/[\x01-\t\x0B\f\x0E-\x1F\x7F\x81\x8D\x8F\x90\x9D\xA0-\uFFFF]/g, es);
+    };
 
     /**
     *    Extension of JQuery Library for getting either the text or the value out of child elements.
