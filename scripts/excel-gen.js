@@ -121,7 +121,6 @@ function ExcelGen(options) {
             //update to specify format for input by column, or have autoformat.
             //based upon default excel format numbering system
             if (value.match(/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:(\.|,)\d+)?$/)) {
-                console.log("literal: " + value);
                 return { "type": "literal", "value": value.replace(/,/g,""), "text": value };
             } else if (me.__isDate__(value)) {
                 var tmp = new Date(Date.parse(value));
