@@ -11,6 +11,8 @@ from HTML Tables.
 
 [Live Demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm)
 
+If you are using the Chrome Web Browser, check out our [Chrome App](https://chrome.google.com/webstore/detail/excel-generator/ppeejofkpebeikjaalhlmlmhldkhbgih) using this library, you can use this app to see if the js-excel-generator is right for your project.  The Chrome App is also an open source project, you can view the source code [here](https://github.com/ecscstatsconsulting/chrome-excel-generator)
+
 The project is still very early in development, more updates will follow shortly.
 
 ## Getting Started - How to use
