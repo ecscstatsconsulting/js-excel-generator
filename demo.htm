@@ -4020,7 +4020,8 @@
 		<h3>Code:</h3>
 		<code>
 			$("#generate-csv").click(function () {<br/>
-			&#160;&#160;excel = new ExcelGen({<br/>
+            &#160;&#160;excel = new ExcelGen({<br/>
+                &#160;&#160;&#160;&#160;"file_name": "output.csv",<br/>
 				&#160;&#160;&#160;&#160;"src_id": "csv_table",<br/>
 				&#160;&#160;&#160;&#160;"show_header": true,<br/>
 				&#160;&#160;&#160;&#160;"format": "csv",<br/>
