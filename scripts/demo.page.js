@@ -15,5 +15,14 @@ $(document).ready(function () {
 			"column_formats": ["1", "1", "4", "6", "18"] 
 		});
         excel.generate();
+	});
+    $("#generate-csv").click(function () {
+		excel = new ExcelGen({
+			"file_name": "output.csv",
+			"src_id": "csv_table",
+			"show_header": true,
+			"format": "csv"
+		});
+        excel.generate();
     });
 });

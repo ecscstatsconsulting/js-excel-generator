@@ -43,6 +43,7 @@ function ExcelGen(options) {
 
     this.defaultOptions = {
         "src_id": "",
+        "format": "xlsx",
         "type": "table",
         "show_header": false,
         "auto_format": false,
@@ -426,14 +427,34 @@ function ExcelGen(options) {
     }
 
     this.generate = function () {
-        var workbook = this.__blank__();
-        workbook.worksheets.file("sheet1.xml", this.sheet.to_xml());
-        workbook.xl.file("sharedStrings.xml", this.sharedStrings.to_xml());
-        workbook.tables.file("table1.xml", this.table.to_xml());
-        workbook.base.generateAsync({ type: "blob" })
-            .then(function (content) {
-                saveAs(content, me.options.file_name);
-            });
+        switch (this.options.format) {
+            case "xlsx":
+                var workbook = this.__blank__();
+                workbook.worksheets.file("sheet1.xml", this.sheet.to_xml());
+                workbook.xl.file("sharedStrings.xml", this.sharedStrings.to_xml());
+                workbook.tables.file("table1.xml", this.table.to_xml());
+                workbook.base.generateAsync({ type: "blob" })
+                    .then(function (content) {
+                        saveAs(content, me.options.file_name);
+                    });
+                break;
+            case "csv":
+                var arrCSV = [];
+                this.sheet.rows.forEach(function (r) {
+                    var row = [];
+                    r.forEach(function(c) {
+                        var val = "\"" + c.text.replace(/\"/g,"\"\"") + "\"";
+                        row.push(val);
+                    })
+                    arrCSV.push(row.join(","));
+                })
+                var csv = arrCSV.join("\n");
+                saveAs(new Blob([csv], {type : 'text/csv'}), me.options.file_name);
+                break;
+            default:
+                console.error("excel-gen(generate): Invalid Format Type: " + this.options.format);
+        }
+
     };
 
 
