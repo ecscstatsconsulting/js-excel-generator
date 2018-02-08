@@ -51,6 +51,7 @@ The following options are current available:
     "src": null
     "header_row": null,
     "body_rows": null,
+    "format": "xlsx|csv",
     "type": "table|normal",
     "show_header": false,
     "author": "JavaScript Excel Generator",
@@ -68,6 +69,8 @@ The following options are current available:
 **body_rows** - Jquery Elements of the body TR tags, if src_id or src is not specified this will be used.
 
 *note: both header_row and body_rows properties must be set if not using src_id*
+
+**format** - Specifies the output format, current options are **xlsx** for standard workbook or **csv** for CSV output.
 
 **type** - If set to 'table', the output will be generated inside of a Filterable Excel Table
 
