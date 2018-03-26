@@ -43,12 +43,14 @@ function ExcelGen(options) {
 
     this.defaultOptions = {
         "src_id": "",
+        "src": null,
         "format": "xlsx",
         "type": "table",
         "show_header": false,
         "auto_format": false,
         "header_row": null,
         "body_rows": null,
+        "exclude_selector": null,
         "author": "JavaScript Excel Generator",
         "file_name": "output.xlsx",
         "column_formats": []
@@ -374,12 +376,15 @@ function ExcelGen(options) {
             var outerThis = this;
 	        var colCount = 1;
             this.options.header_row.children("th,td").each(function () {
-                //header text gets stored for table
-                var txt = $(this).textOrValue().trim().replace(/ +(?= )/g, '');
-		        if ((txt == "") && (outerThis.options.type == "table")) txt = "Column " + colCount;
-                outerThis.headers.push(txt.replace(/[<]/g,""));
-                row.push(outerThis.sharedStrings.add(txt));
-		        colCount++;
+                var cell = $(this);
+                if ((!outerThis.options.exclude_selector) || (cell.is(outerThis.options.exclude_selector) === false)) {
+                    //header text gets stored for table
+                    var txt = $(this).textOrValue().trim().replace(/ +(?= )/g, '');
+                    if ((txt == "") && (outerThis.options.type == "table")) txt = "Column " + colCount;
+                    outerThis.headers.push(txt.replace(/[<]/g,""));
+                    row.push(outerThis.sharedStrings.add(txt));
+                    colCount++;
+                }
             });
             this.sheet.rows.push(row);
         }
@@ -388,7 +393,10 @@ function ExcelGen(options) {
             this.options.body_rows.each(function () {
                 var row = [];
                 $(this).children("th,td").each(function () {
-                    row.push(outerThis.sharedStrings.add($(this).textOrValue().trim().replace(/ +(?= )/g, '')));
+                    var cell = $(this);
+                    if ((!outerThis.options.exclude_selector) || (cell.is(outerThis.options.exclude_selector) === false)) {
+                        row.push(outerThis.sharedStrings.add($(this).textOrValue().trim().replace(/ +(?= )/g, '')));
+                    }
                 });
                 outerThis.sheet.rows.push(row);
             });

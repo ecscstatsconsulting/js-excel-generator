@@ -70,6 +70,7 @@
 		<li><a href="#basic">Basic Table</a></li>
         <li><a href="#formatted">Formatted Table</a></li>
         <li><a href="#csv">CSV Output</a></li>
+        <li><a href="#exclude">Exclude Column and DOM Source input</a></li>
 	</ul>
     <div class="table-container">
 		<h2 id="basic">Basic Table</h2>
@@ -4028,7 +4029,57 @@
 				&#160;&#160;});<br/>
 				&#160;&#160;excel.generate();<br/>
 			});<br/>
-		</code>
+        </code>
+        <br/>
+		<hr/>
+		<br/>
+		<h2 id="exclude">Exlude Columns and DOM Source Input</h2>
+        <button id="generate-exclude">
+            Generate Excel</button>
+        <br /><br />
+        <table id="exclude_table" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th class="xl_none">Favorite Colour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Enkeleda Cuko</td>
+                    <td>NY, Albania</td>
+                    <td class="xl_none">Blue</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Paul Warren</td>
+                    <td>NY, USA</td>
+                    <td class="xl_none">Orange</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Marko</td>
+                    <td>Fier, Albania</td>
+                    <td class="xl_none">Red</td>
+                </tr>
+            </tbody>
+        </table>
+		<h3>Code:</h3>
+		<code>
+            var myTable = $("#exclude_table");
+			$("#generate-exclude").click(function () {<br/>
+            &#160;&#160;excel = new ExcelGen({<br/>
+                &#160;&#160;&#160;&#160;"file_name": "output.xlsx",<br/>
+				&#160;&#160;&#160;&#160;"src": myTable,<br/>
+				&#160;&#160;&#160;&#160;"show_header": true,<br/>
+				&#160;&#160;&#160;&#160;"exclude_selector": ".xl_none",<br/>
+				&#160;&#160;});<br/>
+				&#160;&#160;excel.generate();<br/>
+			});<br/>
+        </code>
     </div>
 </body>
 </html>

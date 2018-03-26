@@ -24,5 +24,15 @@ $(document).ready(function () {
 			"format": "csv"
 		});
         excel.generate();
-    });
+	});
+	var myTable = $("#exclude_table");
+	$("#generate-exclude").click(function () {
+		excel = new ExcelGen({
+			"file_name": "output.xlsx",
+			"src": myTable,
+			"show_header": true,
+			"exclude_selector": ".xl_none"
+		});
+		excel.generate();
+	});
 });

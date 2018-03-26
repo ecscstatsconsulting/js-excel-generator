@@ -56,7 +56,8 @@ The following options are current available:
     "show_header": false,
     "author": "JavaScript Excel Generator",
     "file_name": "output.xlsx",
-    "column_formats": []
+    "column_formats": [],
+    "exclude_selector": null
 }
 ```
 
@@ -81,6 +82,8 @@ The following options are current available:
 **file_name** - File name of the Excel Output
 
 **column_formats** - Array of column formats (see [demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm) for more info).  For a list of column formats see [ExcelDataFormats.md](ExcelDataFormats.md)
+
+**exclude_selector** - jquery selector of cells to exclude from output in to Excel. NOTE: all cells along a column of the table must be excluded, otherwise the output spreadsheet will be broken.  See the last example in the [demo](https://rawgit.com/ecscstatsconsulting/js-excel-generator/master/demo.htm) for more info. 
 
 ## Dependencies
 The code uses jQuery, jszip.js and FileSaver.js.  For ease of use, these libraries 
